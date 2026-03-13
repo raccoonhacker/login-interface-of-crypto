@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UniCrypto | Absolute Zero Protocol</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Syncopate:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --neon-emerald: #10b981;
+        --neon-lime: #84cc16;
+        --bg-dark: #020202;
+      }
+
+      body {
+        font-family: "Space Grotesk", sans-serif;
+        background-color: var(--bg-dark);
+        color: #ffffff;
+        margin: 0;
+        overflow: hidden; /* 防止溢出，保持单屏电影感 */
+        height: 100vh;
+      }
+
+      /* 1. 扫描线效果 (Scanlines) */
+      body::before {
+        content: " ";
+        position: fixed;
+        inset: 0;
+        background:
+          linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+          linear-gradient(
+            90deg,
+            rgba(255, 0, 0, 0.03),
+            rgba(0, 255, 0, 0.01),
+            rgba(0, 0, 255, 0.03)
+          );
+        background-size:
+          100% 4px,
+          3px 100%;
+        z-index: 100;
+        pointer-events: none;
+      }
+
+      /* 2. 背景网格点 */
+      .grid-bg {
+        position: fixed;
+        inset: 0;
+        background-image: radial-gradient(
+          circle at 2px 2px,
+          rgba(16, 185, 129, 0.1) 1px,
+          transparent 0
+        );
+        background-size: 40px 40px;
+        z-index: -2;
+      }
+
+      /* 3. 核心：动态垂直霓虹轴 */
+      #vertical-axis {
+        position: absolute;
+        left: 50%;
+        top: -10%;
+        bottom: -10%;
+        width: 1px;
+        background: linear-gradient(
+          to bottom,
+          transparent,
+          var(--neon-emerald),
+          var(--neon-lime),
+          transparent
+        );
+        box-shadow:
+          0 0 20px var(--neon-emerald),
+          0 0 40px var(--neon-emerald);
+        transform: translateX(-50%);
+        transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+        z-index: 1;
+      }
+
+      /* 4. 圆形网络 Motif */
+      .motif-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 600px;
+        height: 600px;
+        z-index: 0;
+      }
+      .outer-ring {
+        position: absolute;
+        inset: 0;
+        border: 1px solid rgba(16, 185, 129, 0.15);
+        border-radius: 50%;
+        animation: spin 30s linear infinite;
+      }
+      .inner-ring {
+        position: absolute;
+        inset: 15%;
+        border: 1px dashed rgba(16, 185, 129, 0.3);
+        border-radius: 50%;
+        animation: spin-reverse 20s linear infinite;
+      }
+
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      @keyframes spin-reverse {
+        from { transform: rotate(360deg); }
+        to { transform: rotate(0deg); }
+      }
+
+      /* 5. 镜头光晕 (Lens Flare) */
+      .lens-flare {
+        position: absolute;
+        width: 300px;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.2);
+        filter: blur(2px);
+        box-shadow: 0 0 20px white;
+        transform: rotate(-45deg);
+        top: 20%;
+        left: -10%;
+        opacity: 0.3;
+        animation: flicker 4s infinite;
+      }
+
+      @keyframes flicker {
+        0%, 100% { opacity: 0.1; }
+        50% { opacity: 0.4; }
+      }
+
+      /* 6. 文字特效 */
+      .glitch-text {
+        font-family: "Syncopate", sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        background: linear-gradient(to bottom, #fff 30%, #666);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .btn-futuristic {
+        position: relative;
+        background: transparent;
+        border: 1px solid var(--neon-emerald);
+        color: var(--neon-emerald);
+        padding: 12px 30px;
+        font-size: 10px;
+        letter-spacing: 4px;
+        overflow: hidden;
+        transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .btn-futuristic:hover {
+        background: var(--neon-emerald);
+        color: black;
+        box-shadow: 0 0 30px var(--neon-emerald);
+        transform: translateY(-2px);
+      }
+
+      /* 打字机动画 */
+      @keyframes typing {
+        from { width: 0; }
+        to { width: 100%; }
+      }
+      @keyframes blink-caret {
+        from, to { border-color: transparent; }
+        50% { border-color: var(--neon-emerald); }
+      }
+    </style>
+  </head>
+  <body class="flex flex-col justify-between">
+    <div class="grid-bg"></div>
+    <div id="vertical-axis"></div>
+    <div class="lens-flare"></div>
+
+    <div class="motif-container">
+      <div class="outer-ring"></div>
+      <div class="inner-ring"></div>
+    </div>
+
+    <nav class="relative z-50 p-6 md:p-10 flex justify-between items-center">
+      <div class="flex items-center gap-4">
+        <div class="w-2 h-2 bg-emerald-500 shadow-[0_0_10px_#10b981]"></div>
+        <span class="font-bold tracking-[0.3em] text-[10px] md:text-xs">UCN_CORE_v7.0</span>
+      </div>
+      <div class="hidden md:flex gap-10 text-[10px] text-gray-500 tracking-[0.2em]">
+        <a href="#" class="hover:text-emerald-400 transition-colors">DATA_FEED</a>
+        <a href="#" class="hover:text-emerald-400 transition-colors">LIQUIDITY_POOL</a>
+        <a href="#" class="hover:text-emerald-400 transition-colors">USER_AUTH</a>
+      </div>
+    </nav>
+
+    <main class="relative z-10 text-center flex flex-col items-center px-4">
+      <div class="mb-6 overflow-hidden border-r-2 border-emerald-500 whitespace-nowrap inline-block animate-[typing_3s_steps(40,end),blink-caret_0.75s_step-end_infinite]">
+        <p id="typewriter" class="text-emerald-500 text-[9px] md:text-[10px] tracking-[0.4em] uppercase font-bold">
+          Initializing encrypted connection...
+        </p>
+      </div>
+
+      <h1 class="glitch-text text-3xl md:text-7xl font-bold leading-tight mt-4">
+        The Universal <br />
+        <span class="text-white opacity-90">Gateway to</span> <br />
+        <span class="italic">Digital Finance</span>
+      </h1>
+
+      <div class="mt-12 md:mt-16 flex flex-col md:flex-row gap-6 md:gap-8">
+        <button class="btn-futuristic uppercase font-bold">
+          Access System
+        </button>
+        <button class="text-[10px] tracking-[0.4em] text-gray-400 hover:text-white transition italic uppercase underline decoration-emerald-500/50 underline-offset-8">
+          Read Manifest
+        </button>
+      </div>
+    </main>
+
+    <footer class="relative z-50 p-6 md:p-10 flex flex-col md:flex-row justify-between items-center gap-4 text-[8px] md:text-[9px] text-gray-600 tracking-[0.3em]">
+      <div class="flex gap-6 md:gap-10">
+        <div>NODE_STATUS: <span class="text-emerald-500 opacity-60">OPTIMAL</span></div>
+        <div>LATENCY: <span class="text-emerald-500 opacity-60">1.02ms</span></div>
+      </div>
+      <div class="text-center md:text-right">EST_2026 // ALL_RIGHTS_RESERVED</div>
+    </footer>
+
+    <script>
+      const axis = document.getElementById("vertical-axis");
+      const typewriter = document.getElementById("typewriter");
+
+      // 1. 鼠标跟随交互逻辑
+      document.addEventListener("mousemove", (e) => {
+        const xPos = e.clientX;
+        const width = window.innerWidth;
+
+        // 计算偏移量，让中轴随鼠标移动
+        const moveX = ((xPos - width / 2) / width) * 50; // 50px 的最大偏移
+        axis.style.transform = `translateX(calc(-50% + ${moveX}px))`;
+
+        // 背景网格随动
+        document.body.style.backgroundPosition = `${xPos / 60}px ${e.clientY / 60}px`;
+      });
+
+      // 2. 打字机文字切换
+      setTimeout(() => {
+        typewriter.innerText = "Connection Established. Welcome to the Core.";
+      }, 3500);
+    </script>
+  </body>
+</html>
